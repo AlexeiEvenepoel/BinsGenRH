@@ -80,6 +80,21 @@ npm start
 http://localhost:8080
 ```
 
+## 🌐 APIs Externas Utilizadas
+
+### dnschecker.org
+
+- **Endpoint**: `https://dnschecker.org/ajax_files/credit_card_validator.php`
+- **Uso**: Verificación de BINs con información detallada
+- **Respuesta**: JSON con datos completos del BIN
+- **Ejemplo**: `?ccn=4244854340554425`
+
+### pastebin.com
+
+- **Endpoint**: `https://pastebin.com/raw/RKnrunYb`
+- **Uso**: Verificación de versiones del script
+- **Respuesta**: Texto plano con número de versión
+
 ## 🔧 API Endpoints
 
 ### Generar BINs
@@ -151,9 +166,11 @@ Content-Type: application/json
 
 ### 3. Verificador de BINs (Opción 6 del script original)
 
-- Información detallada del BIN
-- Tipo de tarjeta, país, banco, etc.
-- Simulación de consulta a base de datos
+- **API Real**: Usa dnschecker.org para información precisa
+- Información detallada: Marca, Tipo, País, Banco, etc.
+- Datos adicionales: IIN, MII, Luhn validation, PAN
+- Sistema de fallback si la API externa falla
+- Ejemplo: `4244854340554425` → Diamond Trust Bank Kenya Ltd.
 
 ### 4. Extrapolador de Tarjetas (Opción 8 del script original)
 
