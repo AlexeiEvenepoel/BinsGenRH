@@ -1,0 +1,70 @@
+{
+  "project": {
+    "name": "BINs Generator RH - JavaScript Edition",
+    "version": "3.0.0",
+    "description": "Generador de BINs y tarjetas de crédito en JavaScript",
+    "author": "@RealHackRH_593",
+    "telegram": "@MundoNetRH",
+    "license": "MIT"
+  },
+  "servers": {
+    "backend": {
+      "port": 3000,
+      "host": "localhost",
+      "cors": {
+        "origin": "http://localhost:8080",
+        "credentials": true
+      }
+    },
+    "frontend": {
+      "port": 8080,
+      "host": "localhost",
+      "apiUrl": "http://localhost:3000/api"
+    }
+  },
+  "features": {
+    "binGenerator": {
+      "enabled": true,
+      "maxBins": 100,
+      "supportedTypes": ["visa", "mastercard", "amex", "discover"]
+    },
+    "cardGenerator": {
+      "enabled": true,
+      "maxCards": 50,
+      "supportedLengths": [15, 16],
+      "luhnValidation": true
+    },
+    "binChecker": {
+      "enabled": true,
+      "minBinLength": 6,
+      "simulateApi": true
+    },
+    "extrapolator": {
+      "enabled": true,
+      "algorithms": ["basic", "medium", "advanced"]
+    }
+  },
+  "security": {
+    "helmet": true,
+    "cors": true,
+    "rateLimiting": false,
+    "inputValidation": true
+  },
+  "development": {
+    "logging": true,
+    "debugMode": false,
+    "hotReload": true
+  },
+  "ui": {
+    "theme": "hacker",
+    "colors": {
+      "primary": "#00ff00",
+      "secondary": "#ffff00",
+      "danger": "#ff0000",
+      "warning": "#ff8800",
+      "info": "#00ffff"
+    },
+    "animations": true,
+    "responsive": true
+  }
+}
