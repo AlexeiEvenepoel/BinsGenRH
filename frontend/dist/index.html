@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BINs Generator RH - JavaScript Edition</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Header -->
+      <header class="header">
+        <div class="header-content">
+          <div class="logo">
+            <i class="fas fa-credit-card"></i>
+            <h1>MUNDO BINS RH PRO</h1>
+          </div>
+          <div class="subtitle">
+            <p>JavaScript Edition - BY: @RealHackRH_593</p>
+            <p class="telegram">📱 Telegram: @MundoNetRH</p>
+          </div>
+        </div>
+      </header>
+
+      <!-- Navigation -->
+      <nav class="nav-tabs">
+        <button class="tab-btn active" data-tab="bin-generator">
+          <i class="fas fa-search"></i>
+          <span>Generador de BINs</span>
+        </button>
+        <button class="tab-btn" data-tab="card-generator">
+          <i class="fas fa-credit-card"></i>
+          <span>Generador Live</span>
+        </button>
+        <button class="tab-btn" data-tab="bin-checker">
+          <i class="fas fa-check-circle"></i>
+          <span>Verificador BINs</span>
+        </button>
+        <button class="tab-btn" data-tab="extrapolator">
+          <i class="fas fa-calculator"></i>
+          <span>Extrapolador</span>
+        </button>
+        <button class="tab-btn" data-tab="version-check">
+          <i class="fas fa-sync-alt"></i>
+          <span>Actualizar</span>
+        </button>
+      </nav>
+
+      <!-- BIN Generator Tab -->
+      <div id="bin-generator" class="tab-content active">
+        <div class="card">
+          <h2><i class="fas fa-search"></i> Generador de BINs</h2>
+          <p class="description">Genera BINs básicos por tipo de tarjeta</p>
+
+          <div class="form-group">
+            <label for="card-type">
+              <i class="fas fa-credit-card"></i> Tipo de Tarjeta:
+            </label>
+            <select id="card-type" class="form-control">
+              <option value="visa">VISA</option>
+              <option value="mastercard">MASTERCARD</option>
+              <option value="amex">AMERICAN EXPRESS</option>
+              <option value="discover">DISCOVER</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="bin-count">
+              <i class="fas fa-hashtag"></i> Cantidad a Generar:
+            </label>
+            <input
+              type="number"
+              id="bin-count"
+              class="form-control"
+              min="1"
+              max="100"
+              value="10"
+            />
+            <small class="help-text">Máximo 100 BINs por solicitud</small>
+          </div>
+
+          <button id="generate-bins-btn" class="btn btn-primary">
+            <i class="fas fa-play"></i> Generar BINs
+          </button>
+
+          <div
+            id="bins-results"
+            class="results-container"
+            style="display: none"
+          >
+            <h3><i class="fas fa-list"></i> BINs Generados:</h3>
+            <div id="bins-list" class="results-list"></div>
+            <button id="copy-bins-btn" class="btn btn-secondary">
+              <i class="fas fa-copy"></i> Copiar Todos
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card Generator Tab -->
+      <div id="card-generator" class="tab-content">
+        <div class="card">
+          <h2><i class="fas fa-credit-card"></i> Generador Live de Tarjetas</h2>
+          <p class="description">
+            Genera tarjetas completas basadas en un formato BIN (Opción 7 del
+            script original)
+          </p>
+
+          <div class="form-group">
+            <label for="bin-format">
+              <i class="fas fa-edit"></i> Formato BIN:
+            </label>
+            <input
+              type="text"
+              id="bin-format"
+              class="form-control"
+              placeholder="416869xxxxxxxxxx"
+              maxlength="16"
+            />
+            <small class="help-text">
+              Use 'x' para dígitos aleatorios. Ejemplo: 416869xxxxxxxxxx (16
+              dígitos para Visa/Mastercard, 15 para Amex)
+            </small>
+          </div>
+
+          <div class="form-group">
+            <label for="card-count">
+              <i class="fas fa-hashtag"></i> Cantidad a Generar:
+            </label>
+            <input
+              type="number"
+              id="card-count"
+              class="form-control"
+              min="1"
+              max="50"
+              value="25"
+            />
+            <small class="help-text">Máximo 50 tarjetas por solicitud</small>
+          </div>
+
+          <div class="form-group">
+            <label>
+              <i class="fas fa-calendar"></i> Fecha personalizada:
+            </label>
+            <div class="date-inputs">
+              <input type="checkbox" id="custom-date-check" /> Usar fecha
+              personalizada
+              <div id="custom-date-inputs" style="display: none">
+                <input
+                  type="number"
+                  id="custom-month"
+                  placeholder="MM"
+                  min="1"
+                  max="12"
+                  maxlength="2"
+                />
+                <input
+                  type="number"
+                  id="custom-year"
+                  placeholder="YYYY"
+                  min="2022"
+                  max="2030"
+                  maxlength="4"
+                />
+              </div>
+            </div>
+          </div>
+
+          <button id="generate-cards-btn" class="btn btn-primary">
+            <i class="fas fa-play"></i> Generar Tarjetas
+          </button>
+
+          <div
+            id="search-simulation"
+            class="search-simulation"
+            style="display: none"
+          >
+            <div class="search-message">
+              <i class="fas fa-search"></i> $ BUSCANDO TARGETAS DE CREDITO CON
+              INJECCION RH
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill"></div>
+            </div>
+          </div>
+
+          <div
+            id="cards-results"
+            class="results-container"
+            style="display: none"
+          >
+            <div class="results-header">
+              <h3><i class="fas fa-list"></i> Tarjetas Generadas</h3>
+              <div id="cards-stats" class="stats"></div>
+            </div>
+
+            <div class="table-container">
+              <table id="cards-table" class="results-table">
+                <thead>
+                  <tr>
+                    <th>CREDIT CARD</th>
+                    <th>CVV</th>
+                    <th>MES</th>
+                    <th>AÑO</th>
+                    <th>CHECKER</th>
+                  </tr>
+                </thead>
+                <tbody id="cards-tbody"></tbody>
+              </table>
+            </div>
+
+            <div class="results-actions">
+              <button id="copy-cards-btn" class="btn btn-secondary">
+                <i class="fas fa-copy"></i> Copiar Todas
+              </button>
+              <button id="export-cards-btn" class="btn btn-secondary">
+                <i class="fas fa-download"></i> Exportar TXT
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BIN Checker Tab -->
+      <div id="bin-checker" class="tab-content">
+        <div class="card">
+          <h2><i class="fas fa-check-circle"></i> Verificador de BINs</h2>
+          <p class="description">
+            Verifica información detallada de un BIN (Opción 6 del script
+            original)
+          </p>
+
+          <div class="form-group">
+            <label for="bin-to-check">
+              <i class="fas fa-search"></i> BIN a Verificar:
+            </label>
+            <input
+              type="text"
+              id="bin-to-check"
+              class="form-control"
+              placeholder="416869"
+              maxlength="16"
+            />
+            <small class="help-text"
+              >Ingrese al menos los primeros 6 dígitos del BIN</small
+            >
+          </div>
+
+          <button id="check-bin-btn" class="btn btn-primary">
+            <i class="fas fa-search"></i> Verificar BIN
+          </button>
+
+          <div
+            id="bin-info-results"
+            class="results-container"
+            style="display: none"
+          >
+            <h3><i class="fas fa-info-circle"></i> Información del BIN</h3>
+            <div id="bin-info" class="bin-info-card"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Extrapolator Tab -->
+      <div id="extrapolator" class="tab-content">
+        <div class="card">
+          <h2><i class="fas fa-calculator"></i> Multi Extrapolador de CC</h2>
+          <p class="description">
+            Extrapolación de tarjetas usando algoritmos avanzados (Opción 8 del
+            script original)
+          </p>
+
+          <div class="form-group">
+            <label for="card1">
+              <i class="fas fa-credit-card"></i> Primera Tarjeta:
+            </label>
+            <input
+              type="text"
+              id="card1"
+              class="form-control"
+              placeholder="4168691234567890"
+              maxlength="16"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="card2">
+              <i class="fas fa-credit-card"></i> Segunda Tarjeta:
+            </label>
+            <input
+              type="text"
+              id="card2"
+              class="form-control"
+              placeholder="4168699876543210"
+              maxlength="16"
+            />
+          </div>
+
+          <button id="extrapolate-btn" class="btn btn-primary">
+            <i class="fas fa-calculator"></i> Extrapolate Cards
+          </button>
+
+          <div
+            id="extrapolation-results"
+            class="results-container"
+            style="display: none"
+          >
+            <h3>
+              <i class="fas fa-chart-line"></i> Resultados de Extrapolación
+            </h3>
+            <div id="extrapolation-content"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Version Check Tab -->
+      <div id="version-check" class="tab-content">
+        <div class="card">
+          <h2><i class="fas fa-sync-alt"></i> Actualizar Script RH</h2>
+          <p class="description">
+            Verificar actualizaciones disponibles (Opción 9 del script original)
+          </p>
+
+          <div class="version-info">
+            <div class="current-version">
+              <strong>Versión Actual:</strong>
+              <span id="current-version">3.0</span>
+            </div>
+            <div class="author-info">
+              <p><strong>Desarrollado por:</strong> @RealHackRH_593</p>
+              <p><strong>Telegram:</strong> @MundoNetRH</p>
+              <p><strong>PayPal:</strong> paypal.me/edwinyd</p>
+            </div>
+          </div>
+
+          <button id="check-version-btn" class="btn btn-primary">
+            <i class="fas fa-sync-alt"></i> Buscar Actualizaciones
+          </button>
+
+          <div
+            id="version-results"
+            class="results-container"
+            style="display: none"
+          >
+            <div id="version-message" class="version-message"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Loading Overlay -->
+      <div id="loading-overlay" class="loading-overlay" style="display: none">
+        <div class="loading-content">
+          <div class="spinner"></div>
+          <p id="loading-text">Procesando...</p>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <div class="footer-content">
+          <div class="footer-info">
+            <p>
+              <strong>© 2025 RealHackRH - Generador de BINs y Tarjetas</strong>
+            </p>
+            <p>📱 Telegram: @MundoNetRH | 💰 PayPal: paypal.me/edwinyd</p>
+          </div>
+          <div class="footer-warning">
+            <p>⚠️ Solo para fines educativos y de testing</p>
+            <p>🚫 Prohibida la venta de esta herramienta</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

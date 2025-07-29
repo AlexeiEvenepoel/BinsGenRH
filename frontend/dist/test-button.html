@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test Auto Generator Button</title>
+  </head>
+  <body>
+    <h1>Test Auto Generator Button</h1>
+
+    <!-- Elementos necesarios para el test -->
+    <div>
+      <input type="checkbox" id="auto-visa" checked /> VISA
+      <input type="checkbox" id="auto-mastercard" checked /> MASTERCARD
+      <input type="checkbox" id="auto-amex" /> AMEX
+      <input type="checkbox" id="auto-discover" /> DISCOVER
+    </div>
+
+    <div>
+      <input type="number" id="auto-bins-per-type" value="5" />
+      <input type="number" id="auto-cards-per-bin" value="25" />
+      <input type="number" id="auto-interval" value="2000" />
+      <input type="number" id="auto-max-cards" value="1000" />
+      <input type="text" id="auto-filter-countries" placeholder="Countries" />
+    </div>
+
+    <button id="auto-start-btn">Test Start Button</button>
+
+    <div id="loading-overlay" style="display: none">Loading...</div>
+
+    <script>
+      console.log("Test script loaded");
+
+      // Simular la clase BinsGeneratorApp
+      class TestApp {
+        constructor() {
+          this.apiBaseUrl = "http://localhost:3000/api";
+          this.setupEventListeners();
+        }
+
+        setupEventListeners() {
+          console.log("Setting up test event listeners");
+          const autoStartBtn = document.getElementById("auto-start-btn");
+          if (autoStartBtn) {
+            console.log("Auto start button found");
+            autoStartBtn.addEventListener("click", () => {
+              console.log("Test button clicked!");
+              this.startAutoGeneration();
+            });
+          } else {
+            console.error("Auto start button not found");
+          }
+        }
+
+        getAutoConfig() {
+          const cardTypes = [];
+          if (document.getElementById("auto-visa").checked)
+            cardTypes.push("visa");
+          if (document.getElementById("auto-mastercard").checked)
+            cardTypes.push("mastercard");
+          if (document.getElementById("auto-amex").checked)
+            cardTypes.push("amex");
+          if (document.getElementById("auto-discover").checked)
+            cardTypes.push("discover");
+
+          const filterCountries = document
+            .getElementById("auto-filter-countries")
+            .value.split(",")
+            .map((c) => c.trim())
+            .filter((c) => c.length > 0);
+
+          return {
+            cardTypes,
+            binsPerType: parseInt(
+              document.getElementById("auto-bins-per-type").value
+            ),
+            cardsPerBin: parseInt(
+              document.getElementById("auto-cards-per-bin").value
+            ),
+            intervalMs: parseInt(
+              document.getElementById("auto-interval").value
+            ),
+            maxCards: parseInt(document.getElementById("auto-max-cards").value),
+            filterCountries,
+          };
+        }
+
+        showLoading(message) {
+          console.log("Loading:", message);
+          document.getElementById("loading-overlay").style.display = "block";
+        }
+
+        hideLoading() {
+          document.getElementById("loading-overlay").style.display = "none";
+        }
+
+        showError(message) {
+          console.error("Error:", message);
+          alert("Error: " + message);
+        }
+
+        showSuccess(message) {
+          console.log("Success:", message);
+          alert("Success: " + message);
+        }
+
+        async startAutoGeneration() {
+          console.log("startAutoGeneration called");
+
+          const config = this.getAutoConfig();
+          console.log("Config:", config);
+
+          this.showLoading("Iniciando generación automática...");
+
+          try {
+            const response = await fetch(
+              `${this.apiBaseUrl}/auto-generator/start`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ config }),
+              }
+            );
+
+            console.log("Response status:", response.status);
+            const data = await response.json();
+            console.log("Response data:", data);
+
+            if (!response.ok) {
+              throw new Error(
+                data.error || "Error iniciando generación automática"
+              );
+            }
+
+            this.showSuccess("Generación automática iniciada");
+          } catch (error) {
+            console.error("Error:", error);
+            this.showError(error.message);
+          } finally {
+            this.hideLoading();
+          }
+        }
+      }
+
+      // Inicializar cuando el DOM esté listo
+      document.addEventListener("DOMContentLoaded", () => {
+        console.log("DOM loaded, initializing test app");
+        new TestApp();
+      });
+    </script>
+  </body>
+</html>
