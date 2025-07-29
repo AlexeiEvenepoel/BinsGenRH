@@ -130,6 +130,8 @@ webpack-stats.json
 # Build directories
 build/
 public/build/
+dist
+frontend/dist/
 
 # IDE files
 .vscode/
